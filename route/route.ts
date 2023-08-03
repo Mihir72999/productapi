@@ -6,7 +6,7 @@ import { getBrandmodel, getComment, getProduct, postComment, updateComment } fro
 const router = Router({ strict: true, caseSensitive: false, mergeParams: true })
 
 router.get('/', (req: Request, res: Response) => {
-   res.send('hello how are you')
+   res.send('welcome to productApi')
 })
 
 
