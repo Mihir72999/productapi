@@ -1,16 +1,23 @@
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import prisma from '../db/connectDb'
-
 import type { BrandProductMap } from '../controller.d'
+import { Readable } from 'stream'
 
 
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
 
     const product = await prisma.products.findMany()
-
-    res.status(200).json(product)
+    const redable = new Readable({
+        objectMode:true,
+        read(){}
+    })
+    
+    redable.on('data', (chunk)=>{
+    res.status(200).json(chunk)
+    })
+    redable.push(product)
 
 })
 export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
@@ -32,7 +39,17 @@ export const getBrandmodel = asyncHandler(async (req: Request, res: Response) =>
             }
         }
     }
-    res.status(200).json(getItem)
+    const redable = new Readable({
+        objectMode:true,
+        read(){}
+    })
+    
+    redable.on('data', (chunk)=>{
+       
+        res.status(200).json(chunk)
+       
+    })
+    redable.push(getItem)
 
 })
 
