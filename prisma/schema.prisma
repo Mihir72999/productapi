@@ -24,14 +24,14 @@ model Comments {
   id        String       @id @default(auto()) @map("_id") @db.ObjectId
   name      String?
   support   String?
-  type      Role[]
-  item      type[] 
+  type      Role[]    
+  item      String       @default("apple")      
+  
   reactions Reactionns[]
 }
 
-enum type {
-Apple
-}
+
+
 
 type Role {
   employee String
