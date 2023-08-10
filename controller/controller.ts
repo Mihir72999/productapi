@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import prisma from '../db/connectDb'
-import type { BrandProductMap } from '../controller.d'
+import type { BrandProductMap , Products } from '../controller.d'
 import { Readable } from 'stream'
 
 
@@ -21,7 +21,7 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
 
 })
 export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
-    const product = await prisma.products.findMany()
+    const product : Products  = await prisma.products.findMany()
 
     const getItem: BrandProductMap = {};
 
