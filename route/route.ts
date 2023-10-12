@@ -1,25 +1,48 @@
-import { Router, Request, Response } from 'express'
-import * as fs from 'fs'
+import { Router} from 'express'
 
-import { getBrandmodel, getComment, getProduct, postComment, updateComment } from '../controller/controller'
+import {
+    callback,
+    getAllRouteHandler,
+    getBrandmodel,
+    getComment,
+    getOrder,
+    getProduct, 
+    getStarterPage, 
+    paymentCheckout, 
+    postComment,
+    postContent, 
+    postContenteById,
+    updateComment
+    } from '../controller/controller'
+import { deleteAccount, getUser, logOut, postLogin, postRegister, updatePassword } from '../controller/authControll'
+import jwtVerify from '../middleware/jwtVerify'
+
+
+
 
 
 const router = Router({ strict: true, caseSensitive: false, mergeParams: true })
 
-router.get('/', (req: Request, res: Response) => {
-   fs.readFile(`build/prisma.html`,'utf-8',(error,resonse)=>{
-   if(error) console.log(error)
-   res.send(resonse)
-  })
-})
 
-
-router.get('/getProduct', getProduct)
-router.post('/postComment', postComment)
+router.patch('/updateUser' , updatePassword)
+router.post('/register',postRegister )
+router.use(jwtVerify)
+router.get('/',getStarterPage)
+router.get('/getProduct',jwtVerify, getProduct)
+router.post('/postComment', postComment)    
 router.patch('/updateComment', updateComment)
 router.get('/getBrandmodel', getBrandmodel)
 router.get('/getComment',getComment)
-router.all('*', (req: Request, res: Response) => {
-   res.json({ message: 'path is not found' })
-})
+router.get('/postContent' ,postContent)
+router.get('/postContent/:id' , postContenteById)
+router.post('/login' ,  postLogin )
+router.get('/getUser' , getUser)
+router.post('/logout' , logOut)
+router.post('/order' ,getOrder)
+router.post('/paymentCheckout' , paymentCheckout)
+router.post('/callback' ,callback)
+router.delete('/deleteuser' , deleteAccount)
+router.all('*', getAllRouteHandler)
+
+
 export default router
