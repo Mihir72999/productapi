@@ -9,7 +9,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-
+//product model 
 model products {
   id           String  @id @default(auto()) @map("_id") @db.ObjectId
   name         String?
@@ -20,6 +20,10 @@ model products {
   brandmodel   String?
 }
 
+
+
+
+// comments model 
 model Comments {
   id        String       @id @default(auto()) @map("_id") @db.ObjectId
   name      String?
@@ -28,9 +32,9 @@ model Comments {
   item      String       @default("apple")      
   
   reactions Reactionns[]
+
+  @@unique([name])
 }
-
-
 
 
 type Role {
@@ -41,4 +45,51 @@ type Reactionns {
   thumbsUp Int
   heart    Int
   like     Int
+}
+
+
+// registermodel
+
+model Register {
+  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  userName String?
+  password String?
+  email    String? @unique()
+
+  @@unique([password,email])
+}
+
+model orders{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  fname String 
+  lname String 
+  street String
+  town String
+  pin Int
+  phone Int
+  email String
+  orderId String
+  state String
+  product product[]
+  createdAt DateTime @default(now())
+  updetedAt DateTime @updatedAt
+}
+
+type product{
+  brand String
+  image String
+  price Int
+  id String
+  name String
+  brandmodel String
+  qty Int
+  availableQty Int
+}
+
+
+model callbacks{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  razorpay_payment_id String
+  razorpay_order_id String
+  razorpay_signature String
 }
