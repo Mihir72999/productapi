@@ -19,3 +19,8 @@ export type Products = {
     brand: string | null;
     brandmodel: string | null;
 }[]
+export type Post = {
+  id:string 
+  title:string
+  date:Date
+}
