@@ -225,7 +225,7 @@ export const getAllRouteHandler = ((req: Request, res: Response) => {
 
       await prisma.callbacks.create({data:{razorpay_payment_id , razorpay_order_id , razorpay_signature}})
       
-     res.redirect(`http://localhost:5173/redirectrazorpay/page?order_id=${razorpay_order_id}`)
+     res.redirect(`https://coverapp.onrender.com/redirectrazorpay/page?order_id=${razorpay_order_id}`)
      }else{
        
        res.status(401).json({sucess:'false'})
