@@ -6,24 +6,6 @@ import router from './route/route'
 import http from 'http'
 import cookieParser from 'cookie-parser'
 import { corsOptions } from './middleware/corOption'
-import cluster from 'cluster'
-import os from 'os'
-
-const numCPUs = os.cpus().length
-
-dotenv.config({path:'.env'})
-
-if(cluster.isPrimary){ 
-    for( let i = 0 ; i < numCPUs; i ++){
-        cluster.fork()
-        cluster.fork()
-        
-    }
-    cluster.on('exit' , ()=>{
-        cluster.fork()
-
-    })
-}else{
 
 const app = express()
 const server = http.createServer(app)
@@ -47,4 +29,4 @@ app.use(errorHandle)
  
 
 
-}
+
