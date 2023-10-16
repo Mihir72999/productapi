@@ -11,18 +11,18 @@
   "author": "mihir patel",
   "license": "ISC",
   "devDependencies": {
-    "@prisma/client": "^5.0.0",
     "@types/bcrypt": "^5.0.0",
-    "@types/cookie-parser": "^1.4.4",
+    "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
-    "@types/jsonwebtoken": "^9.0.3",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.4.4",
     "prisma": "^5.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@prisma/client": "^5.0.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -30,8 +30,11 @@
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
     "gray-matter": "^4.0.3",
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.1",
     "nodemon": "^3.0.1",
-    "razorpay": "^2.9.2"
+    "razorpay": "^2.9.2",
+    "razorpay-node-typescript": "^1.1.4",
+    "remark": "^14.0.3",
+    "remark-html": "^15.0.2"
   }
 }
