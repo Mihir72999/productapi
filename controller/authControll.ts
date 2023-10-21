@@ -90,7 +90,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
   try {
     const decoded = jwt.verify(token, `${process.env.JWT_TOKEN}`) as JwtPayload;
 
-    const user = await prisma.register.findFirst({ where: { userName: decoded?.username } ,select:{userName:true , email:true}});
+    const user = await prisma.register.findFirst({ where: { userName: decoded?.username } });
    
     if (!user) {
       return  res.status(401).json({ message: 'user not found' });
