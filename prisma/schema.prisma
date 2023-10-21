@@ -51,13 +51,15 @@ type Reactionns {
 // registermodel
 
 model Register {
-  id String @id @default(auto()) @map("_id") @db.ObjectId 
+  id       String @id @default(auto()) @map("_id") @db.ObjectId 
   userName String?
-  password String?
-  email    String? @unique()
+  password String
+  email    String 
+  image    String?
 
   @@unique([password,email])
 }
+
 
 model orders{
   id String @id @default(auto()) @map("_id") @db.ObjectId
