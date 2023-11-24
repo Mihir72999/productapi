@@ -66,18 +66,17 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     },         
        `${jwtSecret}`,
       {expiresIn:'1d'}
-     )
-     const refreshToken  = jwt.sign({
-      "username": user.userName 
-     },
-     `${jwtSecret}` ,
-     {expiresIn :'1d'}
       )
-      res.cookie('jwt' , refreshToken , {
+     // const refreshToken  = jwt.sign({
+     //  "username": user.userName 
+     // },
+     // `${jwtSecret}` ,
+     // {expiresIn :'1d'}
+     //  )
+      res.cookie('jwt' , accessToken , {
       httpOnly:true,
       secure:true,
       sameSite:'none',        
-      // signed:true,
       maxAge:24 * 60 * 60 * 1000})
      
     res.json({accessToken})
