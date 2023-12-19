@@ -5,12 +5,14 @@ import type { BrandProductMap , Post , Products } from '../controller.d'
 import path from 'path'
 import * as fs from 'fs'
 import matter from 'gray-matter'
-import { Readable } from 'stream'
+
 import Razorpay from 'razorpay'
 import crypto from "crypto" 
+import redableFunction from '../hook/redable'
 
 
 export const getStarterPage = ((req: Request, res: Response) => {
+    
     const item = fs.createReadStream('build/prisma.html')
       item.pipe(res)
      
@@ -20,17 +22,8 @@ export const getStarterPage = ((req: Request, res: Response) => {
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
 
     const product : Products  = await prisma.products.findMany()
-    const redable = new Readable({
-        objectMode:true,
-        read(){}
-    })
     
-    redable.on('data', (chunk)=>{
-       
-         res.status(200).json(chunk)
-       
-    })
-    redable.push(product)
+    redableFunction(product , 200 , res)
 
     
 
@@ -52,19 +45,11 @@ export const getBrandmodel = asyncHandler(async (req: Request, res: Response) =>
             if (item?.availableQty && item?.availableQty > 0) {
                 getItem[brand].brandmodel = [item.brandmodel]
             }
+            
         }
     }
-    const redable = new Readable({
-        objectMode:true,
-        read(){}
-    })
-    
-    redable.on('data', (chunk)=>{
-       
-        res.status(200).json(chunk)
-       
-    })
-    redable.push(getItem)
+   
+    redableFunction(getItem , 200 , res)
    
 
 })
@@ -72,7 +57,7 @@ export const getBrandmodel = asyncHandler(async (req: Request, res: Response) =>
 export const postComment = asyncHandler(async (req: Request, res: Response) => {
 
     const { name, support, item, reactions , type } = req.body
-    console.log(name, support, type, reactions)
+    
     const datas = await prisma.comments.create({
         data: {
             name,
@@ -82,8 +67,8 @@ export const postComment = asyncHandler(async (req: Request, res: Response) => {
             type
         }
     })
-    console.log(datas)
-    res.status(201).json(datas)
+    
+    redableFunction(datas , 201 , res)
 })
 
 
@@ -104,23 +89,19 @@ export const updateComment = asyncHandler(async (req: Request, res: Response) =>
         }
     })
 
-     res.status(203).json({ message: `succesfully ${items.count} updated` })
+     redableFunction({ message: `succesfully ${items.count} updated` } , 203 , res)
 })
 
 
 export const getComment = asyncHandler(async(req:Request,res:Response)=>{
-    const item = await prisma.comments.findMany()
-    const redable = new Readable({
-        objectMode:true,
-        read(){}
-    })
-    
-    redable.on('data', (chunk)=>{
-       
-        res.status(200).json(chunk)
-       
-    })
-    redable.push(item)
+    try{
+        const item = await prisma.comments.findMany()
+        redableFunction(item , 200 , res)
+    }catch(err){
+      console.log(err)
+    }
+
+  
 })
 
 
@@ -142,16 +123,8 @@ export const postContent = asyncHandler(async(req:Request,res:Response)=>{
  
     return data
  })
-const redable = new Readable({
-    objectMode:true,
-    read(){}
-})
 
-redable.on('data', (chunk)=>{
-   
-    res.send(chunk)
-})
-redable.push(allPost)
+redableFunction(allPost , 200 , res)
 })
 
 export const postContenteById = asyncHandler(async(req:Request,res:Response)=>{
@@ -173,28 +146,21 @@ export const getOrder = async (req:Request  , res:Response) =>{
     }
   })
 
-  res.status(200).json(order)
+  redableFunction(order , 200 , res)
 }
 
 
 export const getAllRouteHandler = ((req: Request, res: Response) => {
     
      
-    const readable = new  Readable({
-     objectMode:true,
-     read(){}
-    })
-    readable.on('data' , (chunk) =>{
-  
-       res.json(chunk)
-    })
-    readable.push({message:'path is not found which is entered by you'})
+   
+    redableFunction({message:'path is not found which is entered by you'} , 404 , res)
   })
  
- 
+
   export const paymentCheckout = asyncHandler( async (req:Request , res:Response) =>{
     
-    
+  
     var instance  = new Razorpay({
         key_id : process.env.RAZORPAY_API_KEY_ID || '' ,
         key_secret : process.env.RAZORPAY_API_KEY_SECRET || ''
@@ -210,9 +176,12 @@ export const getAllRouteHandler = ((req: Request, res: Response) => {
       const order = await instance.orders.create(options)
    
     
-      res.status(201).json({sucess:true , order})
+      redableFunction({sucess:true , order},201,res)
+
+
   })
   export const callback  = asyncHandler(async (req:Request , res:Response) =>{
+   
     const {razorpay_payment_id , razorpay_order_id , razorpay_signature } = req.body
     let body= razorpay_order_id + "|" + razorpay_payment_id;
     var expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_API_KEY_SECRET ?? '')
@@ -225,10 +194,11 @@ export const getAllRouteHandler = ((req: Request, res: Response) => {
 
       await prisma.callbacks.create({data:{razorpay_payment_id , razorpay_order_id , razorpay_signature}})
       
-     res.redirect(`https://mobapp-blue.vercel.app/redirectrazorpay/page?order_id=${razorpay_order_id}`)
+     res.redirect(301 ,`http://localhost:5173/redirectrazorpay/page?order_id=${razorpay_order_id}`)
      }else{
        
-       res.status(401).json({sucess:'false'})
+       redableFunction({sucess:'false'},401 , res)
      }
+   
   })
   
