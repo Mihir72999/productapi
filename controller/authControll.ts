@@ -9,7 +9,7 @@ import redableFunction from '../hook/redable'
 
 
 export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
-    const {userName , email ,password} = req.body
+    const {userName , email ,password , image} = req.body
     const salt = 10
     const generatePassword = bcrypt.hashSync(password,salt)
     const foundUser = await prisma.register.findFirst({where:{email}})
@@ -27,7 +27,8 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
         data:{
             userName,
             email,
-            password:generatePassword 
+            password:generatePassword ,
+            image
         }
     })
     
