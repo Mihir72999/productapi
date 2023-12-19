@@ -2,8 +2,9 @@ import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import prisma from '../db/connectDb'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { Readable } from 'stream'
 import bcrypt  from 'bcrypt'
+import redableFunction from '../hook/redable'
+
 
 
 
@@ -14,11 +15,11 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     const foundUser = await prisma.register.findFirst({where:{email}})
    
     if(foundUser?.email){
-      res.status(422).json({message:'user already register'})
+      redableFunction({message:'user already register'}, 422 , res)
      return
     } 
     else if(!userName || !email || !password){
-      res.status(401).json({message:'missing credintial field please fill proper'})
+      redableFunction({message:'missing credintial field please fill proper'} , 401 , res)
       return
     }
 
@@ -29,15 +30,8 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
             password:generatePassword 
         }
     })
-    const readable = new  Readable({
-        objectMode:true,
-        read(){}
-       })
-       readable.on('data' , (chunk) =>{
-     
-          res.status(200).json(chunk)
-       })
-       readable.push(item)
+    
+       redableFunction(item , 200 , res)
     
   })
 
@@ -50,7 +44,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
       const pas = await bcrypt.compare(password ,pass)
       
       if(!user || !pas){
-        res.status(401).json({message:'invalid cradintial'})
+        redableFunction({message:'invalid cradintial'}, 401 , res)
        return;
       }
      
@@ -66,20 +60,22 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     },         
        `${jwtSecret}`,
       {expiresIn:'1d'}
-      )
-     // const refreshToken  = jwt.sign({
-     //  "username": user.userName 
-     // },
-     // `${jwtSecret}` ,
-     // {expiresIn :'1d'}
-     //  )
+     )
+    //  const refreshToken  = jwt.sign({
+    //   "username": user.userName 
+    //  },
+    //  `${jwtSecret}` ,
+    //  {expiresIn :'1d'}
+    //   )
       res.cookie('jwt' , accessToken , {
       httpOnly:true,
       secure:true,
-      sameSite:'none',        
+      sameSite:'none',   
       maxAge:24 * 60 * 60 * 1000})
      
-    res.json({accessToken})
+   
+   
+    redableFunction({accessToken} , 200 , res)
   
   })
 
@@ -96,24 +92,21 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
 
     }
 
-    res.json(user);
+    redableFunction(user , 200 , res);
   } catch (error) {
-    
-      res.status(403).json({ message: 'forbidden'  });
-    
-  }
+    redableFunction({ message: 'forbidden'} , 403 , res);
+   }
 
    }
  export const deleteAccount = asyncHandler(async (req:Request , res:Response)=>{
   const {id} = req.body
   const user = await prisma.register.findFirst({where:{id}})
   if(user){
-    const data =  await prisma.register.delete({where:{id}})
+     await prisma.register.delete({where:{id}})
     
-    res.status(200).json(`${user?.userName} your account has been deleted`)
-
+   redableFunction(`${user?.userName} your account has been deleted`,200 , res)
   }else{
-    res.status(401).json({message:'user not found'})
+    redableFunction({message:'user not found'},401 ,res)
   }
  })  
 export const updatePassword = asyncHandler(async(req:Request , res:Response)=>{
@@ -129,7 +122,8 @@ export const updatePassword = asyncHandler(async(req:Request , res:Response)=>{
         password:generatePassword
       }
     })
-    res.status(201).json({message:`${user.userName} has been updated password` , user})
+    
+   redableFunction({message:`${user.userName} has been updated password` , user},200 , res)
   }else{
     res.status(401).json({message:'user not found'})
   }
@@ -143,8 +137,8 @@ export const updatePassword = asyncHandler(async(req:Request , res:Response)=>{
     res.clearCookie('jwt', {httpOnly:true,
     secure:true,
     sameSite:'none'})
-   res.json({message:'cookie cleared'}) 
-  })
+    redableFunction({message:'cookie cleared'},200 , res)
+   })
 
   
 
