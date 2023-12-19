@@ -174,10 +174,11 @@ export const getAllRouteHandler = ((req: Request, res: Response) => {
       };
     
       const order = await instance.orders.create(options)
-   
-    
-      redableFunction({sucess:true , order},201,res)
-
+      if(order){
+          redableFunction({success:true , order}, 201,res)
+        }else{
+            redableFunction({success:false} , 401 , res)
+        }
 
   })
   export const callback  = asyncHandler(async (req:Request , res:Response) =>{
