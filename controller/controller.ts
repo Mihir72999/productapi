@@ -194,7 +194,7 @@ export const getAllRouteHandler = ((req: Request, res: Response) => {
 
       await prisma.callbacks.create({data:{razorpay_payment_id , razorpay_order_id , razorpay_signature}})
       
-     res.redirect(301 ,`http://localhost:5173/redirectrazorpay/page?order_id=${razorpay_order_id}`)
+     res.redirect(301 ,`https://mobapp-blue.vercel.app/redirectrazorpay/page?order_id=${razorpay_order_id}`)
      }else{
        
        redableFunction({sucess:'false'},401 , res)
