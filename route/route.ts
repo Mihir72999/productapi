@@ -1,5 +1,5 @@
 import { Router} from 'express'
-
+import {module } from '../hook/module'
 import {
     callback,
     getAllRouteHandler,
@@ -21,28 +21,29 @@ import jwtVerify from '../middleware/jwtVerify'
 
 
 
+
 const router = Router({ strict: true, caseSensitive: false, mergeParams: true })
 
 
-router.patch('/updateUser' , updatePassword)
-router.post('/register',postRegister )
+router.patch(module['updateUser'] , updatePassword)
+router.post(module['postRegister'],postRegister )
 router.use(jwtVerify)
-router.get('/',getStarterPage)
-router.get('/getProduct',jwtVerify, getProduct)
-router.post('/postComment', postComment)    
-router.patch('/updateComment', updateComment)
-router.get('/getBrandmodel', getBrandmodel)
-router.get('/getComment',getComment)
-router.get('/postContent' ,postContent)
-router.get('/postContent/:id' , postContenteById)
-router.post('/login' ,  postLogin )
-router.get('/getUser' , getUser)
-router.post('/logout' , logOut)
-router.post('/order' ,getOrder)
-router.post('/paymentCheckout' , paymentCheckout)
-router.post('/callback' ,callback)
-router.delete('/deleteuser' , deleteAccount)
-router.all('*', getAllRouteHandler)
+router.get(module['getStarterPage'],getStarterPage)
+router.get(module['getProduct'], getProduct)
+router.post(module['postComment'], postComment)    
+router.patch(module['updateComment'], updateComment)
+router.get(module['getBrandmodel'], getBrandmodel)
+router.get(module['getComment'],getComment)
+router.get(module['postContent'] ,postContent)
+router.get(module['postContenteById'] , postContenteById)
+router.post(module['postLogin'] ,  postLogin )
+router.get(module['getUser'] , getUser)
+router.post(module['logOut'] , logOut)
+router.post(module['getOrder'] ,getOrder)
+router.post(module['paymentCheckout'] , paymentCheckout)
+router.post(module['callback'] ,callback)
+router.delete(module['deleteAccount'] , deleteAccount)
+router.all(module['getAllRouteHandler'], getAllRouteHandler)
 
 
 export default router
