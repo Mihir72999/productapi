@@ -1,0 +1,21 @@
+export const module = {
+    updateUser : '/updateUser',
+    postRegister : '/register',
+    getStarterPage:'/',
+    getProduct:'/getProduct',
+    postComment:'/postComment',
+    updateComment :'/updateComment',
+    getComment:'/getComment',
+    getBrandmodel:'/getBrandmodel',
+    postContent:'/postContent',
+    postContenteById:'/postContent/:id',
+    postLogin:'/login',
+    getUser:'/getUser',
+    logOut:'/logout' ,
+    getOrder:'/order' ,
+    paymentCheckout:'/paymentCheckout' ,
+    callback: '/callback' , 
+    deleteAccount:'/deleteuser' ,
+    getAllRouteHandler:'*',  
+}as const
+
