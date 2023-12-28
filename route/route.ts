@@ -25,10 +25,11 @@ import jwtVerify from '../middleware/jwtVerify'
 const router = Router({ strict: true, caseSensitive: false, mergeParams: true })
 
 
-router.patch(module['updateUser'] , updatePassword)
+ router.get(module['getStarterPage'],getStarterPage)
 .post(module['postRegister'],postRegister )
-.use(jwtVerify)
-.get(module['getStarterPage'],getStarterPage)
+.patch(module['updateUser'] , updatePassword)
+ 
+router.use(jwtVerify)
 .get(module['getProduct'], getProduct)
 .post(module['postComment'], postComment)    
 .patch(module['updateComment'], updateComment)
