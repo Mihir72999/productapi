@@ -1,18 +1,16 @@
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
-import prisma from '../db/connectDb'
+import {collection} from '../hook/prismaCollection'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import bcrypt  from 'bcrypt'
 import redableFunction from '../hook/redable'
 
-
-
-
 export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
+
     const {userName , email ,password , image} = req.body
     const salt = 10
     const generatePassword = bcrypt.hashSync(password,salt)
-    const foundUser = await prisma.register.findFirst({where:{email}})
+    const foundUser = await collection.findUser({where:{email}})
    
     if(foundUser?.email){
       redableFunction({message:'user already register'}, 422 , res)
@@ -23,7 +21,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
       return
     }
 
-    const item = await prisma.register.create({
+    const item = await collection.createUser({
         data:{
             userName,
             email,
@@ -39,10 +37,10 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
   export const postLogin = asyncHandler(async(req:Request ,res:Response):Promise<void>=>{
     const {email , password } = req.body
   
-     const user = await prisma.register.findFirst({where:{email}})
-     const pass :string | undefined = user?.password ?? ""
+     const user = await collection.findUser({where:{email}})
+     const pass :string | undefined | any = user?.password ?? ""
      
-      const pas = await bcrypt.compare(password ,pass)
+      const pas = bcrypt.compare(password, pass)
       
       if(!user || !pas){
         redableFunction({message:'invalid cradintial'}, 401 , res)
@@ -86,7 +84,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
   try {
     const decoded = jwt.verify(token, `${process.env.JWT_TOKEN}`) as JwtPayload;
 
-    const user = await prisma.register.findFirst({ where: { userName: decoded?.username } });
+    const user = await collection.findUser({ where: { userName: decoded?.username } });
    
     if (!user) {
       return  redableFunction({ message: 'user not found' } , 401 , res);
@@ -101,11 +99,14 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
    }
  export const deleteAccount = asyncHandler(async (req:Request , res:Response)=>{
   const {id} = req.body
-  const user = await prisma.register.findFirst({where:{id}})
+ 
+  const user = await collection.findUser({where:{id}})
   if(user){
-     await prisma.register.delete({where:{id}})
-    
-   redableFunction(`${user?.userName} your account has been deleted`,200 , res)
+     await collection.deleteUser({where:{id}})
+     res.clearCookie('jwt', {httpOnly:true,
+      secure:true,
+      sameSite:'none'})
+  redableFunction(`${user?.userName} your account has been deleted`,200 , res)
   }else{
     redableFunction({message:'user not found'},401 ,res)
   }
@@ -114,10 +115,10 @@ export const updatePassword = asyncHandler(async(req:Request , res:Response)=>{
   const {email , password} = req.body
   const salt = 10
   const generatePassword = bcrypt.hashSync(password,salt)
-  const user = await prisma.register.findFirst({where:{email}})
+  const user = await collection.findUser({where:{email}})
 
-  if(user){
-    await prisma.register.updateMany({
+  if(user){ 
+    await collection.updateUser({
       where:{email},
       data:{
         password:generatePassword
@@ -126,7 +127,7 @@ export const updatePassword = asyncHandler(async(req:Request , res:Response)=>{
     
    redableFunction({message:`${user.userName} has been updated password` , user},200 , res)
   }else{
-    res.status(401).json({message:'user not found'})
+    redableFunction({message:'user not found'},401,res)
   }
 })
    export const logOut = asyncHandler(async(req:Request , res:Response)=>{
