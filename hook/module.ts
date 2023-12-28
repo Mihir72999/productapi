@@ -17,5 +17,6 @@ export const module = {
     callback: '/callback' , 
     deleteAccount:'/deleteuser' ,
     getAllRouteHandler:'*',  
+    webPageFromScraper:'/scraper/:productId'
 }as const
 
