@@ -89,7 +89,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     const user = await prisma.register.findFirst({ where: { userName: decoded?.username } });
    
     if (!user) {
-      return  res.status(401).json({ message: 'user not found' });
+      return  redableFunction({ message: 'user not found' } , 401 , res);
 
     }
 
