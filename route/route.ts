@@ -43,7 +43,6 @@ router.patch(module['updateUser'] , updatePassword)
 .post(module['paymentCheckout'] , paymentCheckout)
 .post(module['callback'] ,callback)
 .delete(module['deleteAccount'] , deleteAccount)
-.get(module['webPageFromScraper'] , webPageFromScraper)
 .all(module['getAllRouteHandler'], getAllRouteHandler)
 
 
