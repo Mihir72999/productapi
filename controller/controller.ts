@@ -89,7 +89,7 @@ export const getComment = asyncHandler(async(req:Request,res:Response)=>{
     try{
         const item = await collection.comment
         redableFunction(item , 200 , res)
-    }catch(err){
+    }catch(err:any){
       console.log(err)
      redableFunction(err , 401, res)
  }})
