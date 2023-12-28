@@ -20,7 +20,7 @@ export const getStarterPage = ((req: Request, res: Response) => {
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
 collection.product
-    .then((products: unknown)=>redableFunction(products , 200 , res))  
+    .then((products:any)=>redableFunction(products , 200 , res))  
     .catch((err: any)=>redableFunction({err} , 200 , res))
 
 })
@@ -45,7 +45,7 @@ export const getBrandmodel = asyncHandler(async (req: Request, res: Response) =>
             
             redableFunction(getItem , 200 , res)
         })
-        .catch((err:unknown)=>console.log(err))
+        .catch((err:any)=>console.log(err))
 
 })
 
@@ -133,8 +133,8 @@ export const getOrder =  asyncHandler(async(req:Request  , res:Response):Promise
         ...req.body
     }
   })
-  .then((order:undefined)=>redableFunction(order , 200 , res))
-  .catch((err:unknown)=>redableFunction({err}, 401 ,res ))
+  .then((order:any)=>redableFunction(order , 200 , res))
+  .catch((err:any)=>redableFunction({err}, 401 ,res ))
   })
 
 export const getAllRouteHandler = (req: Request, res: Response) =>  redableFunction({message:'path is not found which is entered by you'} , 404 , res)
