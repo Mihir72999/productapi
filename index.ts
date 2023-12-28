@@ -7,20 +7,21 @@ import http from 'http'
 import cookieParser from 'cookie-parser'
 import { corsOptions } from './middleware/corOption'
 
-const app = express()
-const server = http.createServer(app)
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(cors(corsOptions))
-app.use(cookieParser())
-
 const port = process.env.PORT || 3400
+const app = express()
+app.use(express.json())
+.use(express.urlencoded({extended:true}))
+.use(cors(corsOptions))
+.use(cookieParser())
+.use(express.static('build'))
+.use(router)
+.use(errorHandle)
 
-app.use(express.static('build'))
-app.use(router)
 
 
-app.use(errorHandle)
+
+const server = http.createServer(app)
+
 
     server.listen(port , ()=>{
         console.log(`server is runing at http://localhost:${port}`)
