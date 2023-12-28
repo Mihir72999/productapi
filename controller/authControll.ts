@@ -79,20 +79,19 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
   })
 
   export const getUser = async(req:Request , res:Response)=>{
-  try {
-    const user = await collection.findUser({ where: { userName: req.user } });
-   
+    const token = req.cookies.jwt
+      try {
+    const decoded = jwt.verify(token, `${process.env.JWT_TOKEN}`) as JwtPayload;
+    const user = await collection.findUser({ where: { userName: decoded?.username } });
     if (!user) {
       return  redableFunction({ message: 'user not found' } , 401 , res);
-
     }
-
     redableFunction(user , 200 , res);
   } catch (error) {
     redableFunction({ message: 'forbidden'} , 403 , res);
-   }
+   }   }
 
-   }
+
  export const deleteAccount = asyncHandler(async (req:Request , res:Response)=>{
   const {id} = req.body
  
