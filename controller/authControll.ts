@@ -82,7 +82,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     const token = req.cookies.jwt
       try {
     const decoded = jwt.verify(token, `${process.env.JWT_TOKEN}`) as JwtPayload;
-    const user = await collection.findUser({ where: { userName: decoded?.username } });
+    const user = await collection.findUser({ where: { userName: decoded?.userInfo?.username } });
     if (!user) {
       return  redableFunction({ message: 'user not found' } , 401 , res);
     }
