@@ -20,7 +20,7 @@ class RegisterCollection  {
         this.createUser = ({data}:any) => register.register.create({data})
         this.findUser = ({where}:any) => register.register.findFirst({where})         
         this.product = register.products.findMany()
-        this.deleteUser = ({where}:any) => register.register.deleteUser({where})
+        this.deleteUser = ({where}:any) => register.register.delete({where})
         this.updateUser = ({where , data}:any) =>register.register.updateMany({where,data})
         this.createComment = ({data}:any)=>register.comments.create({data})
         this.updateComment = ({where,data}:any)=>register.comments.updateMany({where,data})
