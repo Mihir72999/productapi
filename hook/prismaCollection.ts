@@ -1,4 +1,4 @@
-
+import {type PrismaClient } from 'prisma/prisma-client'
 import prisma from '../db/connectDb'
 
 
@@ -7,6 +7,7 @@ class RegisterCollection  {
     findUser: any
     product:  any
     createUser:any
+    brandModel:any
     deleteUser:any
     updateUser:any
     createComment:any
@@ -14,12 +15,13 @@ class RegisterCollection  {
     comment:any
     createOrder:any
     callBack:any
-    constructor(register:any ){
+    constructor(register:PrismaClient ){
          
         this.register = register.register.findMany()
         this.createUser = ({data}:any) => register.register.create({data})
         this.findUser = ({where}:any) => register.register.findFirst({where})         
         this.product = register.products.findMany()
+        this.brandModel = register.products.findMany({select:{id:true , brand:true ,brandmodel:true, availableQty:true }})
         this.deleteUser = ({where}:any) => register.register.delete({where})
         this.updateUser = ({where , data}:any) =>register.register.updateMany({where,data})
         this.createComment = ({data}:any)=>register.comments.create({data})
