@@ -25,7 +25,7 @@ collection.product
 
 })
 export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
-     collection.product
+     collection.brandModel
         .then((product:any)=>{
             const getItem: BrandProductMap = {};
             for ( let item of product) {
