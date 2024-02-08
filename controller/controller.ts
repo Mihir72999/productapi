@@ -30,7 +30,7 @@ async function getProduct(status: number , products: { (): Promise<{ product: Pr
 
 }
 const status = 200
-getProduct(str , async()=>{
+getProduct(status , async()=>{
  const product = await collection.product
  return {product} 
 })
