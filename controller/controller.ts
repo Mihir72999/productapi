@@ -19,7 +19,7 @@ export const getStarterPage = ((req: Request, res: Response) => {
  })
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
-    async function getProduct(str:string , getProduct:void){
+    async function getProduct(str:string , getProduct:any){
      console.log(str)
      try{
          const {product} = await getProduct()
