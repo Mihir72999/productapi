@@ -19,17 +19,17 @@ export const getStarterPage = ((req: Request, res: Response) => {
  })
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
-async function getProduct(str: string , products: { (): Promise<{ product: Products }>; (): PromiseLike<{ product: Products }> | { product: Products } }){
+async function getProduct(status: number , products: { (): Promise<{ product: Products }>; (): PromiseLike<{ product: Products }> | { product: Products } }){
      
      try{
          const {product} = await products()
-           redableFunction(product , 200 , res)
+           redableFunction(product , status , res)
      }catch(err:any){
-          redableFunction({err} , 200 , res)
+          redableFunction({err} , 500 , res)
      }
 
 }
-const str = 'getProduct'
+const status = 200
 getProduct(str , async()=>{
  const product = await collection.product
  return {product} 
@@ -37,10 +37,24 @@ getProduct(str , async()=>{
 
 })
 export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
-     collection.brandModel
-        .then((product:any)=>{
+      async function createBrandModel(status: number, callBack: { (): Promise<{ getItem: BrandProductMap }>; (): PromiseLike<{ getItem: BrandProductMap }> | { getItem: BrandProductMap } }) {
+        try {
+            const { getItem } = await callBack()
+            redableFunction(getItem, status, res)
+        } catch (error) {
+            redableFunction({ error }, 500, res)
+        }
+
+
+    }
+    const status = 200;
+    createBrandModel(
+        status,
+        async () => {
+            const product = await collection.brandModel
+
             const getItem: BrandProductMap = {};
-            for ( let item of product) {
+            for (let item of product) {
                 const brand = item?.brand ?? ""
                 if (item?.brand && item.brand in getItem) {
                     if (!getItem[brand].brandmodel.includes(item.brandmodel) && item?.availableQty && item.availableQty > 0) {
@@ -53,12 +67,10 @@ export const getBrandmodel = asyncHandler(async (req: Request, res: Response) =>
                         getItem[brand].brandmodel = [item.brandmodel]
                     }
                 }
-            }
-            
-            redableFunction(getItem , 200 , res)
-        })
-        .catch((err:any)=>console.log(err))
 
+            }
+            return { getItem }
+        })
 })
 
 export const postComment = asyncHandler(async (req: Request, res: Response) => {
