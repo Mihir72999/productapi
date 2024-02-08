@@ -19,24 +19,24 @@ export const getStarterPage = ((req: Request, res: Response) => {
  })
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
-    async function getProduct(str , product){
-     console.log(str)
-     try{
-         const {product} = await product()
-           redableFunction(product , 200 , res)
-     }catch(err:any){
-          redableFunction({err} , 200 , res)
-     }
+//     async function getProduct(str , product){
+//      console.log(str)
+//      try{
+//          const {product} = await product()
+//            redableFunction(product , 200 , res)
+//      }catch(err:any){
+//           redableFunction({err} , 200 , res)
+//      }
 
-}
-const str = 'getProduct'
-getProduct(str , async()=>{
- const product = await collection.product
- return {product} 
-})
-// collection.product
-//     .then((products:any)=>redableFunction(products , 200 , res))  
-//     .catch((err: any)=>redableFunction({err} , 200 , res))
+// }
+// const str = 'getProduct'
+// getProduct(str , async()=>{
+//  const product = await collection.product
+//  return {product} 
+// })
+ collection.product
+     .then((products:any)=>redableFunction(products , 200 , res))  
+     .catch((err: any)=>redableFunction({err} , 200 , res))
 
 })
 export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
