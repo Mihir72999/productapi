@@ -19,10 +19,10 @@ export const getStarterPage = ((req: Request, res: Response) => {
  })
 
 export const getProduct = asyncHandler(async (req: Request, res: Response) => {
-    async function getProduct(str:string , getProduct:any){
+    async function getProduct(str:string , product:any){
      console.log(str)
      try{
-         const {product} = await getProduct()
+         const {product} = await product()
            redableFunction(product , 200 , res)
      }catch(err:any){
           redableFunction({err} , 200 , res)
@@ -31,7 +31,7 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
 }
 const str = 'getProduct'
 getProduct(str , async()=>{
- const product = await collection.product()
+ const product = await collection.product
  return {product} 
 })
 // collection.product
