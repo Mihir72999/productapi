@@ -24,8 +24,8 @@ export const getProduct = asyncHandler(async (req: Request, res: Response) => {
      try{
          const {product} = await getProduct()
            redableFunction(product , 200 , res)
-     }catch(err){
-          redableFunction({err:err.message} , 200 , res)
+     }catch(err:any){
+          redableFunction({err} , 200 , res)
      }
 
 }
