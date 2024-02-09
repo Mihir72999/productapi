@@ -27,7 +27,7 @@ declare global {
                     
         ) as  DecodedUserInfo    
         
-      req.user = tokens?.userInfo.userEmail
+      req.user = tokens.userInfo.userEmail
       req.email = tokens.userInfo.userEmail  
     } 
     next()
