@@ -32,5 +32,5 @@ declare global {
     } 
     next()
     } 
- }     
+ 
 export default jwtVerify
