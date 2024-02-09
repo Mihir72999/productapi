@@ -21,6 +21,7 @@ declare global {
  const jwtVerify = (req:Request  , res:Response , next:NextFunction)=>{
      const authHeader : string | undefined = req.headers.authorization?.toString() || req.headers.Authorization?.toString() 
      const token =authHeader?.split(' ')[1]
+     console.log(token)
     if(token){
       const tokens:jwt.JwtPayload=   jwt.verify(token,
         `${process.env.JWT_TOKEN}`,
