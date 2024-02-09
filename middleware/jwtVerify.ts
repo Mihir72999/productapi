@@ -20,20 +20,19 @@ declare global {
 
  const jwtVerify = (req:Request  , res:Response , next:NextFunction)=>{
      const authHeader : string | undefined = req.headers.authorization?.toString() || req.headers.Authorization?.toString() 
-  
-   
-     
-    const token =authHeader?.split(' ')[1]
-   
+     const token =authHeader?.split(' ')[1]
     if(token){
 
-    const tokens : jwt.JwtPayload = jwt.verify(token , 
-   `${process.env.JWT_TOKEN}`,
-           ) as DecodedUserInfo    
-           req.user = tokens.userInfo.username 
-           req.email = tokens.userInfo.userEmail   
-        } 
-        next()
+     jwt.verify(token,
+        `${process.env.JWT_TOKEN}`,
+         (err:any, decode:any) => {
+         if(err) res.status(403).json('forbiden')
+          req.user = decode?.userInfo?.username,
+          req.email = decode?.userInfo?.userEmail 
+          next()
+          }
+        ) as jwt.JwtPayload | undefined | DecodedUserInfo    
         
- }
+    } 
+ }     
 export default jwtVerify
