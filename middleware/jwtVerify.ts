@@ -22,17 +22,15 @@ declare global {
      const authHeader : string | undefined = req.headers.authorization?.toString() || req.headers.Authorization?.toString() 
      const token =authHeader?.split(' ')[1]
     if(token){
-
-     jwt.verify(token,
+      const tokens:jwt.JwtPayload=   jwt.verify(token,
         `${process.env.JWT_TOKEN}`,
-         (err:any, decode:any) => {
-         if(err) res.status(403).json('forbiden')
-          req.user = decode?.userInfo?.username,
-          req.email = decode?.userInfo?.userEmail 
-          next()
-          }
-        ) as jwt.JwtPayload | undefined | DecodedUserInfo    
+                    
+        ) as  DecodedUserInfo    
         
+      req.user = tokens?.userInfo.userEmail
+      req.email = tokens.userInfo.userEmail  
+    } 
+    next()
     } 
  }     
 export default jwtVerify
