@@ -7,8 +7,8 @@
       "use": "@now/node"
     },
       {
-            "src": "build/**",
-            "use": "@vercel/static"
+        "src": "build/**",
+         "use": "@vercel/static"
       }
   ],
   "routes": [
