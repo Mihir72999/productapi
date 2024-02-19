@@ -3,7 +3,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "index.js",
+      "src": "index.ts",
       "use": "@now/node"
     },
         {
@@ -16,7 +16,7 @@
      
       "src": "/(.*)",
      
-      "dest": "index.js"
+      "dest": "index.ts"
     },
      {
             "src": "/",
