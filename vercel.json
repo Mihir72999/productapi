@@ -14,12 +14,12 @@
   "routes": [
     {
      
-      "src": "(.*)",
+      "src": "(/*.)",
      
       "dest": "index.ts"
     },
      {
-            "src": "",
+            "src": "/",
             "dest": "build/prisma.html"
         }
   ]
