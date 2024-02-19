@@ -13,7 +13,7 @@ app.use(express.json())
 .use(express.urlencoded({extended:true}))
 .use(cors(corsOptions))
 .use(cookieParser())
-.use(express.static('build'))
+//.use(express.static('build'))
 .use(router)
 .use(errorHandle)
 
