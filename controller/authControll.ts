@@ -36,11 +36,11 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
 
   export const postLogin = asyncHandler(async(req:Request ,res:Response):Promise<void>=>{
     const {email , password } = req.body
-    console.log(req.url)
      const user = await collection.findUser({where:{email}})
      const pass :string | undefined | any = user?.password ?? ""
      
       const pas = await bcrypt.compare(password, pass)
+    console.log(pas)
       
       if(!user || !pas){
         redableFunction({message:'invalid cradintial'}, 401 , res)
