@@ -38,7 +38,7 @@ export const postRegister = asyncHandler(async(req:Request,res:Response)=>{
     const {email , password } = req.body
     console.log(req.url)
      const user = await collection.findUser({where:{email}})
-     const pass :string | undefined | any = user?.password ?? ""
+     const pass :string | undefined  = password ?? ""
      
       const pas = bcrypt.compare(password, pass)
       
