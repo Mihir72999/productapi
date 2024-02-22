@@ -4,10 +4,10 @@
   "builds": [
     {
       "src": "index.ts",
-      "use": "@now/node"
+      "use": "@vercel/node"
     },
       {
-        "src": "build/**",
+        "src": "./build/prisma.html",
          "use": "@vercel/static"
       }
   ],
@@ -20,7 +20,7 @@
     },
      {
             "src": "/",
-            "dest": "build/prisma.html"
+            "dest": "./build/prisma.html"
         }
   ]
 }
