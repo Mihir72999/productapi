@@ -1,4 +1,4 @@
-const whitelist = ['http://localhost:5173', 'https://coverapp.onrender.com', 'https://mobapp-blue.vercel.app']
+const whitelist = ['http://localhost:5173', 'https://coverapp.onrender.com', 'https://mobapp-blue.vercel.app','http://127.0.0.1:5500']
 
 
 type CorsOriginCallback = (error: Error | null , allow: boolean | string) => void;
