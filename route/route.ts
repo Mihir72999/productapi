@@ -10,8 +10,6 @@ import {
     getStarterPage, 
     paymentCheckout, 
     postComment,
-    postContent, 
-    postContenteById,
     updateComment
     } from '../controller/controller'
 import { deleteAccount, getUser, logOut, postLogin, postRegister, updatePassword } from '../controller/authControll'
@@ -35,8 +33,6 @@ router.use(jwtVerify)
 .patch(module['updateComment'], updateComment)
 .get(module['getBrandmodel'], getBrandmodel)
 .get(module['getComment'],getComment)
-.get(module['postContent'] ,postContent)
-.get(module['postContenteById'] , postContenteById)
 .post(module['postLogin'] ,  postLogin )
 .get(module['getUser'] , getUser)
 .post(module['logOut'] , logOut)
