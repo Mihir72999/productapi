@@ -7,8 +7,6 @@ export const module = {
     updateComment :'/updateComment',
     getComment:'/getComment',
     getBrandmodel:'/getBrandmodel',
-    postContent:'/postContent',
-    postContenteById:'/postContent/:id',
     postLogin:'/login',
     getUser:'/getUser',
     logOut:'/logout' ,
