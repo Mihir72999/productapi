@@ -3,7 +3,6 @@ import asyncHandler from 'express-async-handler'
 import type { BrandProductMap , Post , Products } from '../controller.d'
 import path from 'path'
 import * as fs from 'fs'
-import matter from 'gray-matter'
 import {collection} from '../hook/prismaCollection'    
 import Razorpay from 'razorpay'
 import crypto from "crypto" 
@@ -118,38 +117,7 @@ export const getComment = asyncHandler(async(req:Request,res:Response)=>{
      redableFunction(err , 401, res)
  }})
 
-export const postContent = asyncHandler(async(req:Request,res:Response)=>{
- const postDirectory = path.join(process.cwd() , 'post')
- const  fileNames = fs.readdirSync(postDirectory)
- const allPost = fileNames.map(post=>{
-    const id = post.replace(/\.md$/,'')
-    const fullPath = path.join(postDirectory, post)
-    const fileContent = fs.readFileSync(fullPath, 'utf-8')
-   const materResult =matter(fileContent)
-   
-   
-   const data : Post = {
-    id ,
-    title:materResult.data.title,
-    date:materResult.data.date
-   }
- 
-    return data
- })
 
-redableFunction(allPost , 200 , res)
-})
-
-export const postContenteById = asyncHandler(async(req:Request,res:Response)=>{
-      const getDirectory = (process.cwd(), 'post')
-      
-      
-      const {id} = req.params
-      const fullFile = path.join(getDirectory , `${id}.md`)
-     
-      const data = fs.createReadStream(fullFile)
-      data.pipe(res)
-})
 
 export const getOrder =  asyncHandler(async(req:Request  , res:Response):Promise<void> =>{
     collection.createOrder({
