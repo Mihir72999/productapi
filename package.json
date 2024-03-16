@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node index.ts",
     "start": "nodemon index.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "new":"node builds/index.js"
   },
   "keywords": [],
   "author": "mihir patel",
