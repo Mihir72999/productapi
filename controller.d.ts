@@ -9,6 +9,13 @@ type YourProductType = {
 
 }
 export type BrandProductMap = { [brand: string]: YourProductType };
+export interface IProduct {
+  
+  id: string;
+  availableQty: number | null;
+  brand: string | null;
+  brandmodel: string | null;
+}
 
 export type Products = {
   id:string | null;
