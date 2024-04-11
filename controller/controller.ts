@@ -1,6 +1,6 @@
-import { Request, Response } from 'express'
+import { Request, Response , NextFunction} from 'express'
 import asyncHandler from 'express-async-handler'
-import type { BrandProductMap , Post , Products } from '../controller.d'
+import type { BrandProductMap , Post , Products , IProduct } from '../controller.d'
 import path from 'path'
 import * as fs from 'fs'
 import {collection} from '../hook/prismaCollection'    
@@ -17,60 +17,40 @@ export const getStarterPage = ((req: Request, res: Response) => {
   
  })
 
-export const getProduct = asyncHandler(async (req: Request, res: Response) => {
-async function getProduct(status: number , products: { (): Promise<{ product: Products }>; (): PromiseLike<{ product: Products }> | { product: Products } }){
-     
-     try{
-         const {product} = await products()
-           redableFunction(product , status , res)
-     }catch(err:any){
-          redableFunction({err} , 500 , res)
-     }
+export const getProduct = asyncHandler( async(req: Request, res: Response , next:NextFunction):Promise<void> => {
+    
+    collection.product
+    .then((products:Products)=>{
+      redableFunction(products , 200 , res  )})  
+    .catch((err: unknown)=>next(err))
+})  
 
-}
-const status = 200
-getProduct(status , async()=>{
- const product = await collection.product
- return {product} 
-})
 
-})
-export const getBrandmodel = asyncHandler(async (req: Request, res: Response) => {
-      async function createBrandModel(status: number, callBack: { (): Promise<{ getItem: BrandProductMap }>; (): PromiseLike<{ getItem: BrandProductMap }> | { getItem: BrandProductMap } }) {
-        try {
-            const { getItem } = await callBack()
-            redableFunction(getItem, status, res)
-        } catch (error) {
-            redableFunction({ error }, 500, res)
+
+
+export const getBrandmodel = asyncHandler(async (_req: Request, res: Response ,next:NextFunction):Promise<void> => {
+    
+       collection.brandModel
+    .then((product: IProduct[]) => {
+      const getItem: BrandProductMap = {}
+      for (let item of product) {
+        const brand = item?.brand ?? ""
+        if (item?.brand && item.brand in getItem) {
+          if (!getItem[brand].brandmodel.includes(item.brandmodel) && item?.availableQty && item.availableQty > 0) {
+           return getItem[brand].brandmodel.push(item.brandmodel)
+
+          }
+        } else {
+          getItem[brand] = JSON.parse(JSON.stringify(item))
+          if (item?.availableQty && item?.availableQty > 0) {
+            getItem[brand].brandmodel = [item.brandmodel]
+          }
         }
-
-
-    }
-    const status = 200;
-    createBrandModel(
-        status,
-        async () => {
-            const product = await collection.brandModel
-
-            const getItem: BrandProductMap = {};
-            for (let item of product) {
-                const brand = item?.brand ?? ""
-                if (item?.brand && item.brand in getItem) {
-                    if (!getItem[brand].brandmodel.includes(item.brandmodel) && item?.availableQty && item.availableQty > 0) {
-                        getItem[brand].brandmodel.push(item.brandmodel)
-
-                    }
-                } else {
-                    getItem[brand] = JSON.parse(JSON.stringify(item))
-                    if (item?.availableQty && item?.availableQty > 0) {
-                        getItem[brand].brandmodel = [item.brandmodel]
-                    }
-                }
-
-            }
-            return { getItem }
-        })
-})
+      }
+        redableFunction(getItem, 200, res)
+    })
+    .catch((err: unknown) => next(err))
+    })
 
 export const postComment = asyncHandler(async (req: Request, res: Response) => {
 
