@@ -37,8 +37,7 @@ export const getBrandmodel = asyncHandler(async (_req: Request, res: Response ,n
         const brand = item?.brand ?? ""
         if (item?.brand && item.brand in getItem) {
           if (!getItem[brand].brandmodel.includes(item.brandmodel) && item?.availableQty && item.availableQty > 0) {
-           return getItem[brand].brandmodel.push(item.brandmodel)
-
+            getItem[brand].brandmodel.push(item.brandmodel)
           }
         } else {
           getItem[brand] = JSON.parse(JSON.stringify(item))
@@ -47,6 +46,7 @@ export const getBrandmodel = asyncHandler(async (_req: Request, res: Response ,n
           }
         }
       }
+
         redableFunction(getItem, 200, res)
     })
     .catch((err: unknown) => next(err))
