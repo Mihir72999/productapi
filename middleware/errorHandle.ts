@@ -6,7 +6,7 @@ const status = error.statusCode ? error.statusCode : 500
 
 
   res.status(status)
-  res.json({ message: error.message })
+  res.json({ errorMessage: error.message })
 
 }
 
